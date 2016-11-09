@@ -1,9 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -31,15 +29,22 @@ public class GeneratePlainBusMain {
 		Map<Integer, int[]> routeMap = new LinkedHashMap<>();
 		BusGenerator busGenerator = new BusGenerator(routeSize, routeMap);
 
+		List<Integer> uniqueList = new ArrayList<>();
 		for (int i = 0; i < routeSize; i++) {
 			int[] stationArr = new int[1_000];
 			for (int j = 0; j < 1_000; j++) {
-				stationArr[j] = random.nextInt(1_000_000);
+				int val = random.nextInt(1_000_000);
+				while (uniqueList.contains(val)) {
+					val = random.nextInt(1_000_000);
+				}
+				uniqueList.add(val);
+				stationArr[j] = val;
 			}
 			routeMap.put(i, stationArr);
 			if (i % 5_000 == 0) {
 				System.out.println("Route number " + i);
 			}
+			uniqueList.clear();
 		}
 		return busGenerator;
 	}
